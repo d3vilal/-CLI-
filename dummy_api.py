@@ -22,3 +22,20 @@ def read_server(sid: int):
 def add_server(s: dict):
     servers.append(s)
     return s
+
+@app.put("/servers/{sid}")
+def update_server(sid: int, updated_data: dict):
+    for i, s in enumerate(servers):
+        if s["id"] == sid:
+            updated_data["id"] = sid
+            servers[i] = updated_data
+            return servers[i]
+    return {"error": "server not found"}
+
+@app.delete("/servers/{sid}")
+def delete_server(sid: int):
+    for i, s in enumerate(servers):
+        if s["id"] == sid:
+            deleted = servers.pop(i)
+            return {"message": "server deleted", "deleted": deleted}
+    return {"error": "server not found"}
