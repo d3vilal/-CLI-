@@ -30,7 +30,6 @@ def info(sid: int):
             print(f"team: {s.get('team', '-')}")
             print(f"cluster: {s.get('cluster', '-')}")
             print(f"plan: {s.get('plan', '-')}")
-            print(f"auto increase storage: {s.get('auto_increase_storage', '-')}")
     except Exception:
         print("api error.")
 
@@ -40,16 +39,9 @@ def add(
     team: str = typer.Option(..., "--team"),
     cluster: str = typer.Option("", "--cluster"),
     plan: str = typer.Option("", "--plan"),
-    auto_increase_storage: bool = typer.Option(False, "--auto-increase-storage"),
+    auto_increase_storage: bool = typer.Option(False, "--auto_increase_storage") 
 ):
-    try:
-        r = requests.get(API + "/servers")
-        servers = r.json()
-        new_id = max([s["id"] for s in servers], default=0) + 1
-    except Exception:
-        new_id = 1
     data = {
-        "id": new_id,
         "title": title,
         "team": team,
         "cluster": cluster,
@@ -57,8 +49,8 @@ def add(
         "auto_increase_storage": auto_increase_storage
     }
     try:
-        added = requests.post(API + "/servers", json=data)
-        if added.status_code == 200:
+        r = requests.post(API + "/servers", json=data)
+        if r.status_code == 200:
             print("server added!")
         else:
             print("could not add server.")
@@ -71,32 +63,25 @@ def update(
     title: str = typer.Option("", "--title"),
     team: str = typer.Option("", "--team"),
     cluster: str = typer.Option("", "--cluster"),
-    plan: str = typer.Option("", "--plan"),
-    auto_increase_storage: bool = typer.Option(None, "--auto-increase-storage"),
+    plan: str = typer.Option("", "--plan")
 ):
+    data = {}
+    if title:
+        data["title"] = title
+    if team:
+        data["team"] = team
+    if cluster:
+        data["cluster"] = cluster
+    if plan:
+        data["plan"] = plan
+    
     try:
-        r = requests.get(API + f"/servers/{sid}")
-        current = r.json()
-        if "error" in current:
+        r = requests.put(API + f"/servers/{sid}", json=data)
+        result = r.json()
+        if "error" in result:
             print("server not found")
-            return
-        
-        if title:
-            current["title"] = title
-        if team:
-            current["team"] = team
-        if cluster:
-            current["cluster"] = cluster
-        if plan:
-            current["plan"] = plan
-        if auto_increase_storage is not None:
-            current["auto_increase_storage"] = auto_increase_storage
-        
-        updated = requests.put(API + f"/servers/{sid}", json=current)
-        if updated.status_code == 200:
-            print("server updated!")
         else:
-            print("could not update server.")
+            print("server updated!")
     except Exception:
         print("api error.")
 
