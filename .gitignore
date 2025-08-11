@@ -1,33 +1,44 @@
-Python bytecode and caches
-pycache/
+
+
+# Python bytecode and caches
+
+__pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+*\$py.class
 
-Virtual environments
+# Virtual environments
+
 .venv/
 venv/
 env/
 *.venv
 
-Environment files (secrets)
+# Environment files 
+
 .env
 .env.*
 !.env.example
 
-Build and packaging
+# Build and packaging
+
 build/
 dist/
 *.egg-info/
 
-Logs and local databases
+# Logs and local databases
+
 *.log
 *.sqlite3
 *.db
 
-Editors/IDE
+# Editors/IDE
+
 .vscode/
 .idea/
 
-OS files
+# OS files
+
 .DS_Store
+

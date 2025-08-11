@@ -1,8 +1,4 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
 
-# make it markdown file for me to copy
-
-Here’s the complete README.md content formatted as Markdown. You can copy-paste it directly into your README.md file.
 
 # Simple Server Manager (FastAPI + Typer CLI)
 
@@ -13,12 +9,17 @@ A minimal project to manage “servers” using:
 - Clean, beginner-friendly code
 
 
+## Repository
+
+- GitHub: https://github.com/d3vilal/-CLI-
+
+
 ## What It Does
 
 - List all servers
 - Get server details by ID
 - Create a server
-- Update a server (only the fields you pass)
+- Update a server (only the fields passed)
 - Delete a server
 
 
@@ -35,20 +36,20 @@ A minimal project to manage “servers” using:
 
 - dummy_api.py — FastAPI app exposing CRUD endpoints
 - cli_app.py — Typer CLI that calls the API
-- __pycache__/ — Python cache (ignored)
+
 
 
 ## Setup
 
-### 1) Clone
+### 1) Clone the repo
 
 ```bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/d3vilal/-CLI-.git
+cd -CLI-
 ```
 
 
-### 2) Virtual env
+### 2) Create and activate virtual environment
 
 ```bash
 python -m venv .venv
@@ -72,13 +73,14 @@ pip install fastapi uvicorn typer requests
 uvicorn dummy_api:app --reload
 ```
 
-- API base: http://127.0.0.1:8000
-- Docs: http://127.0.0.1:8000/docs
+- API base URL: http://127.0.0.1:8000
+- Swagger docs: http://127.0.0.1:8000/docs
+- ReDoc docs: http://127.0.0.1:8000/redoc
 
 
 ## Use the CLI
 
-In another terminal (with venv activated):
+In another terminal (with the virtual environment activated):
 
 ```bash
 python cli_app.py list
@@ -89,9 +91,34 @@ python cli_app.py delete 1
 ```
 
 
-## Notes
+## Default API URL in CLI
 
-- The API stores data in memory (a Python list). Restarting the server resets data.
-- The CLI assumes API at http://127.0.0.1:8000. If you change it, update the API variable in cli_app.py.
-- This is a learning/demo project. For production, add a database, validation (Pydantic), auth, and better error handling.
+- The CLI expects the API at http://127.0.0.1:8000.
+- To change it, edit:
+
+```python
+API = "http://127.0.0.1:8000"  # in cli_app.py
+```
+
+
+## API Endpoints
+
+- GET http://127.0.0.1:8000/servers
+- GET http://127.0.0.1:8000/servers/{server_id}
+- POST http://127.0.0.1:8000/servers
+- PUT http://127.0.0.1:8000/servers/{server_id}
+- DELETE http://127.0.0.1:8000/servers/{server_id}
+
+
+## Example Server JSON
+
+```json
+{
+  "id": 1,
+  "title": "main_server",
+  "team": "bird",
+  "cluster": "mumbai",
+  "plan": "basic",
+  "auto_increase_storage": false
+}
 
