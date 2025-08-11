@@ -4,6 +4,7 @@ import requests
 app = typer.Typer()
 API = "http://127.0.0.1:8000"
 
+
 @app.command()
 def list():
     try:
@@ -16,6 +17,7 @@ def list():
             print(f"{s['id']}: {s['title']} ({s.get('plan', '-')})")
     except Exception:
         print("api error.")
+
 
 @app.command()
 def info(sid: int):
@@ -33,20 +35,21 @@ def info(sid: int):
     except Exception:
         print("api error.")
 
+
 @app.command()
 def add(
     title: str = typer.Option(..., "--title"),
     team: str = typer.Option(..., "--team"),
     cluster: str = typer.Option("", "--cluster"),
     plan: str = typer.Option("", "--plan"),
-    auto_increase_storage: bool = typer.Option(False, "--auto_increase_storage") 
+    auto_increase_storage: bool = typer.Option(False, "--auto_increase_storage"),
 ):
     data = {
         "title": title,
         "team": team,
         "cluster": cluster,
         "plan": plan,
-        "auto_increase_storage": auto_increase_storage
+        "auto_increase_storage": auto_increase_storage,
     }
     try:
         r = requests.post(API + "/servers", json=data)
@@ -57,13 +60,14 @@ def add(
     except Exception:
         print("api error.")
 
+
 @app.command()
 def update(
     sid: int,
     title: str = typer.Option("", "--title"),
     team: str = typer.Option("", "--team"),
     cluster: str = typer.Option("", "--cluster"),
-    plan: str = typer.Option("", "--plan")
+    plan: str = typer.Option("", "--plan"),
 ):
     data = {}
     if title:
@@ -74,7 +78,7 @@ def update(
         data["cluster"] = cluster
     if plan:
         data["plan"] = plan
-    
+
     try:
         r = requests.put(API + f"/servers/{sid}", json=data)
         result = r.json()
@@ -84,6 +88,7 @@ def update(
             print("server updated!")
     except Exception:
         print("api error.")
+
 
 @app.command()
 def delete(sid: int):
@@ -96,6 +101,7 @@ def delete(sid: int):
             print("server deleted!")
     except Exception:
         print("api error.")
+
 
 if __name__ == "__main__":
     app()
