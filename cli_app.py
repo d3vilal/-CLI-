@@ -2,9 +2,10 @@ import typer
 import requests
 
 app = typer.Typer()
-API = "http://127.0.0.1:8000"
+API = "http://127.0.0.1:8000"  # base URL of the FastAPI server
 
 
+# lists all servers
 @app.command()
 def list():
     try:
@@ -19,6 +20,7 @@ def list():
         print("api error.")
 
 
+# show details of one server
 @app.command()
 def info(sid: int):
     try:
@@ -36,6 +38,7 @@ def info(sid: int):
         print("api error.")
 
 
+# add a new server
 @app.command()
 def add(
     title: str = typer.Option(..., "--title"),
@@ -44,6 +47,7 @@ def add(
     plan: str = typer.Option("", "--plan"),
     auto_increase_storage: bool = typer.Option(False, "--auto_increase_storage"),
 ):
+    # build request body from given options
     data = {
         "title": title,
         "team": team,
@@ -69,6 +73,7 @@ def update(
     cluster: str = typer.Option("", "--cluster"),
     plan: str = typer.Option("", "--plan"),
 ):
+
     data = {}
     if title:
         data["title"] = title
@@ -90,6 +95,7 @@ def update(
         print("api error.")
 
 
+# delete a server by id
 @app.command()
 def delete(sid: int):
     try:
